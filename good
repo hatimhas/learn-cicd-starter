@@ -1,0 +1,45 @@
+[1mdiff --git a/.github/workflows/cd.yml b/.github/workflows/cd.yml[m
+[1mindex 5cb889b..f777aaf 100644[m
+[1m--- a/.github/workflows/cd.yml[m
+[1m+++ b/.github/workflows/cd.yml[m
+[36m@@ -8,10 +8,19 @@[m [mjobs:[m
+   deploy:[m
+     name: Deploy[m
+     runs-on: ubuntu-latest[m
+[31m-[m
+[32m+[m[41m    [m
+[32m+[m[32m    env:[m
+[32m+[m[32m      DATABASE_URL: ${{ secrets.DATABASE_URL }}[m
+[32m+[m[41m    [m
+     steps:[m
+       - name: Check out code[m
+         uses: actions/checkout@v4[m
+[32m+[m[41m      [m
+[32m+[m[32m      - name: install goose[m[41m [m
+[32m+[m[32m        run:  go install github.com/pressly/goose/v3/cmd/goose@latest[m
+[32m+[m[41m      [m
+[32m+[m[32m      - name: use goose CLI[m
+[32m+[m[32m        run:  goose -version[m[41m [m
+ [m
+       - name: Set up Go[m
+         uses: actions/setup-go@v5[m
+[36m@@ -37,6 +46,10 @@[m [mjobs:[m
+           gcloud builds submit \[m
+             --tag us-central1-docker.pkg.dev/notely-470813/notely-ar-repo/notely:latest .[m
+       [m
+[32m+[m
+[32m+[m[32m      - name: Run scrips to execute goose migrations[m
+[32m+[m[32m        run: ./scripts/migrateup.sh[m[41m [m
+[32m+[m
+       - name: Deploy to Cloud Run[m
+         run: | [m
+           gcloud run deploy notely \[m
+[1mdiff --git a/.gitignore b/.gitignore[m
+[1mindex 2092f54..573a721 100644[m
+[1m--- a/.gitignore[m
+[1m+++ b/.gitignore[m
+[36m@@ -2,3 +2,4 @@[m [mout[m
+ .env[m
+ learn-cicd-starter[m
+ notely[m
+[32m+[m[32m.env[m
