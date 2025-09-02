@@ -17,7 +17,9 @@ jobs:
         uses: actions/checkout@v4
       
       - name: install goose 
-        run:  go install github.com/pressly/goose/v3/cmd/goose@latest
+        run: |
+          go install github.com/pressly/goose/v3/cmd/goose@latest \
+          echo "$HOME/go/bin" >> $GITHUB_PATH
       
       - name: use goose CLI
         run:  goose -version 
